@@ -22,6 +22,10 @@ const TodoBox = () => {
     }
   }, [theme, todoListItems]);
 
+  useEffect(() => {
+    localStorage.setItem("todolist", JSON.stringify(todoListItems));
+  }, [todoListItems]);
+
   const createTodo = () => {
     const todoLength = todoListItems?.length || 0;
     const todo = {
@@ -29,12 +33,10 @@ const TodoBox = () => {
       id: todoLength + 1,
       completed: false,
     };
-    if (todo.title > 3) {
-      setTodoListItems((prev) => {
-        return [...prev, todo];
-      });
-      localStorage.setItem("todolist", JSON.stringify(todoListItems));
-    }
+
+    setTodoListItems((prev) => {
+      return [...prev, todo];
+    });
   };
 
   return (
