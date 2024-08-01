@@ -18,12 +18,10 @@ const TodoBox = () => {
     }
   }, [theme]);
 
-  console.log(theme);
-
   return (
-    <div className="w-3/5 h-4/5 px-3 flex flex-col gap-5">
+    <div className="mobile:w-4/5 w-3/5 h-4/5 px-3 flex flex-col gap-5">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-semibold tracking-[0.3em] text-white">
+        <h1 className="text-4xl font-semibold tracking-[0.3em] text-darkTheme-very-dark-desaturated-blue dark:text-darkTheme-light-grayish-blue">
           CANDO
         </h1>
         {theme === "light" ? (

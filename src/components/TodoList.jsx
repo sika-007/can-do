@@ -1,10 +1,12 @@
+import { useState } from "react";
 import todoList from "../dummyTodo.json";
 import { BiCircle } from "react-icons/bi";
 import { BiCheckCircle } from "react-icons/bi";
 import { BiTrash } from "react-icons/bi";
 
 const TodoList = () => {
-  const { todos } = todoList;
+  const [todos] = useState(JSON.parse(localStorage.getItem("todolist")) || []);
+
   const todoElements = todos.map(({ completed, id, title }) => {
     return (
       <div
