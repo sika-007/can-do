@@ -14,6 +14,7 @@ const TodoBox = () => {
   );
   const isInitialRender = useRef(true);
 
+  console.log(todoListItems);
   useEffect(() => {
     const root = document.documentElement;
     if (theme === "light") {

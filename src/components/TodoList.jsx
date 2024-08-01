@@ -2,6 +2,7 @@ import { useState } from "react";
 import TodoElements from "./TodoElement";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 const TodoList = ({ todoListItems, setTodoListItems }) => {
   const [filter, setFilter] = useState("all");
@@ -34,7 +35,17 @@ const TodoList = ({ todoListItems, setTodoListItems }) => {
     setCurrentText("");
   };
 
-  const todoElements = filteredTodos.map(({ completed, id, title }) => {
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return; // Exit if dropped outside the list
+
+    const items = Array.from(todoListItems);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setTodoListItems(items);
+  };
+
+  const todoElements = filteredTodos.map(({ completed, id, title }, index) => {
     return (
       <TodoElements
         key={id}
@@ -48,13 +59,27 @@ const TodoList = ({ todoListItems, setTodoListItems }) => {
         setCurrentText={setCurrentText}
         setTodoListItems={setTodoListItems}
         title={title}
+        index={index}
       />
     );
   });
 
   return (
     <>
-      <div className="rounded-t-md shadow-lg overflow-auto">{todoElements}</div>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId="todolist">
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className="rounded-t-md shadow-lg overflow-auto"
+            >
+              {todoElements}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
       {todoListItems.length > 0 && (
         <div
           className={`rounded-b-md shadow-lg overflow-auto bg-white dark:bg-darkTheme-very-dark-desaturated-blue flex items-center justify-between px-4 py-1 transition-colors gap-1`}
