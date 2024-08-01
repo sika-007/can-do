@@ -6,7 +6,7 @@ const Background = () => {
       <div className="w-full">
         <img className="w-full" src={bgDesktopDark} alt="top-bg" />
       </div>
-      <div className="bg-lightTheme-very-light-gray w-full h-full" />
+      <div className="bg-lightTheme-very-light-gray dark:bg-darkTheme-very-dark-blue w-full h-full transition-all" />
     </div>
   );
 };
