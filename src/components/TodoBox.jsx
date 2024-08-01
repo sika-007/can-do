@@ -3,6 +3,7 @@ import TodoInput from "./TodoInput";
 import TodoList from "./TodoList";
 import { CiDark } from "react-icons/ci";
 import { CiLight } from "react-icons/ci";
+import { nanoid } from "nanoid";
 
 const TodoBox = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -27,10 +28,9 @@ const TodoBox = () => {
   }, [todoListItems]);
 
   const createTodo = () => {
-    const todoLength = todoListItems?.length || 0;
     const todo = {
       title: newTodo,
-      id: todoLength + 1,
+      id: nanoid(),
       completed: false,
     };
 
@@ -57,7 +57,11 @@ const TodoBox = () => {
           />
         )}
       </div>
-      <TodoInput createTodo={createTodo} setNewTodo={setNewTodo} />
+      <TodoInput
+        newTodo={newTodo}
+        createTodo={createTodo}
+        setNewTodo={setNewTodo}
+      />
       <TodoList
         todoListItems={todoListItems}
         setTodoListItems={setTodoListItems}

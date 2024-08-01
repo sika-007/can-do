@@ -1,11 +1,13 @@
 import { FaPlusCircle } from "react-icons/fa";
+import PropTypes from "prop-types";
 
-const TodoInput = ({ createTodo, setNewTodo }) => {
+const TodoInput = ({ newTodo, createTodo, setNewTodo }) => {
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
         createTodo();
+        setNewTodo("");
       }}
       className="w-full transition-colors dark:bg-darkTheme-very-dark-desaturated-blue shadow-xl bg-white rounded-lg flex items-center pr-2"
     >
@@ -13,6 +15,7 @@ const TodoInput = ({ createTodo, setNewTodo }) => {
         type="text"
         minLength={5}
         maxLength={70}
+        value={newTodo}
         onChange={(e) => {
           setNewTodo(e.target.value);
         }}
@@ -24,6 +27,12 @@ const TodoInput = ({ createTodo, setNewTodo }) => {
       </button>
     </form>
   );
+};
+
+TodoInput.propTypes = {
+  createTodo: PropTypes.func,
+  newTodo: PropTypes.string,
+  setNewTodo: PropTypes.func,
 };
 
 export default TodoInput;
