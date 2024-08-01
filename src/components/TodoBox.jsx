@@ -6,6 +6,10 @@ import { CiLight } from "react-icons/ci";
 
 const TodoBox = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [newTodo, setNewTodo] = useState("");
+  const [todoListItems, setTodoListItems] = useState(
+    JSON.parse(localStorage.getItem("todolist")) || []
+  );
 
   useEffect(() => {
     const root = document.documentElement;
@@ -16,7 +20,22 @@ const TodoBox = () => {
       root.classList.add("dark");
       localStorage.setItem("theme", "dark");
     }
-  }, [theme]);
+  }, [theme, todoListItems]);
+
+  const createTodo = () => {
+    const todoLength = todoListItems?.length || 0;
+    const todo = {
+      title: newTodo,
+      id: todoLength + 1,
+      completed: false,
+    };
+    if (todo.title > 3) {
+      setTodoListItems((prev) => {
+        return [...prev, todo];
+      });
+      localStorage.setItem("todolist", JSON.stringify(todoListItems));
+    }
+  };
 
   return (
     <div className="mobile:w-4/5 w-3/5 h-4/5 px-3 flex flex-col gap-5">
@@ -36,8 +55,11 @@ const TodoBox = () => {
           />
         )}
       </div>
-      <TodoInput />
-      <TodoList />
+      <TodoInput createTodo={createTodo} setNewTodo={setNewTodo} />
+      <TodoList
+        todoListItems={todoListItems}
+        setTodoListItems={setTodoListItems}
+      />
     </div>
   );
 };

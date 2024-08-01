@@ -1,13 +1,9 @@
-import { useState } from "react";
-import todoList from "../dummyTodo.json";
 import { BiCircle } from "react-icons/bi";
 import { BiCheckCircle } from "react-icons/bi";
 import { BiTrash } from "react-icons/bi";
 
-const TodoList = () => {
-  const [todos] = useState(JSON.parse(localStorage.getItem("todolist")) || []);
-
-  const todoElements = todos.map(({ completed, id, title }) => {
+const TodoList = ({ todoListItems, setTodoListItems }) => {
+  const todoElements = todoListItems.map(({ completed, id, title }) => {
     return (
       <div
         className="bg-white dark:bg-darkTheme-very-dark-desaturated-blue flex items-center py-1 min-h-10 gap-2 border-b dark:border-b-darkTheme-very-dark-blue px-1 pr-3 transition-colors"
@@ -29,7 +25,14 @@ const TodoList = () => {
           </p>
         )}
 
-        <BiTrash className="text-red-700" />
+        <BiTrash
+          onClick={() =>
+            setTodoListItems((prevItems) =>
+              prevItems.filter((todo) => todo.id !== id)
+            )
+          }
+          className="text-red-700"
+        />
       </div>
     );
   });
