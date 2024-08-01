@@ -1,5 +1,7 @@
 import { Background, TodoContainer } from "./components";
 import { BsGithub } from "react-icons/bs";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -13,6 +15,7 @@ function App() {
       </a>
       <Background />
       <TodoContainer />
+      <ToastContainer />
     </>
   );
 }

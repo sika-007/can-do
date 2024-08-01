@@ -1,13 +1,13 @@
-import { BiCircle } from "react-icons/bi";
-import { BiCheckCircle } from "react-icons/bi";
-import { BiTrash } from "react-icons/bi";
-import PropTypes from "prop-types";
 import { useState } from "react";
+import TodoElements from "./TodoElement";
+import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 
 const TodoList = ({ todoListItems, setTodoListItems }) => {
   const [filter, setFilter] = useState("all");
   const [editingId, setEditingId] = useState(null); // State for tracking editing todo
   const [currentText, setCurrentText] = useState("");
+  const [theme] = useState(localStorage.getItem("theme") || "light");
 
   const filteredTodos = todoListItems.filter((todo) => {
     if (filter === "completed") return todo.completed;
@@ -36,78 +36,19 @@ const TodoList = ({ todoListItems, setTodoListItems }) => {
 
   const todoElements = filteredTodos.map(({ completed, id, title }) => {
     return (
-      <div
-        className="bg-white dark:bg-darkTheme-very-dark-desaturated-blue flex items-center py-1 min-h-10 gap-2 border-b dark:border-b-darkTheme-very-dark-blue px-1 pr-3 transition-colors"
+      <TodoElements
         key={id}
-      >
-        {/* Check mark for whether on ot task is pending */}
-        {completed ? (
-          <BiCheckCircle
-            onClick={() => {
-              setTodoListItems((prevItems) =>
-                prevItems.map((todo) =>
-                  todo.id === id
-                    ? { ...todo, completed: !todo.completed }
-                    : todo
-                )
-              );
-            }}
-            className="h-5 w-5 shrink-0 text-black dark:text-lightTheme-very-light-gray cursor-pointer"
-          />
-        ) : (
-          <BiCircle
-            onClick={() => {
-              setTodoListItems((prevItems) =>
-                prevItems.map((todo) =>
-                  todo.id === id
-                    ? { ...todo, completed: !todo.completed }
-                    : todo
-                )
-              );
-            }}
-            className="h-5 w-5 shrink-0 cursor-pointer"
-          />
-        )}
-
-        {/* Title struck through if todo item is completed */}
-        {completed ? (
-          <s className="text-black w-full dark:text-lightTheme-very-light-gray">
-            {title}
-          </s>
-        ) : editingId === id ? (
-          <input
-            value={currentText}
-            onChange={(e) => setCurrentText(e.target.value)}
-            onBlur={() => saveChanges(id)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                saveChanges(id);
-              } else if (e.key === "Escape") {
-                cancelEdit();
-              }
-            }}
-            autoFocus
-            className="text-black h-full max-h-fit resize-none w-full dark:text-lightTheme-very-light-gray"
-          />
-        ) : (
-          <div
-            className="text-black w-full dark:text-lightTheme-very-light-gray cursor-pointer"
-            onClick={() => handleEdit(id, title)}
-          >
-            {title}
-          </div>
-        )}
-
-        {/* Delete todos with this button */}
-        <BiTrash
-          onClick={() => {
-            setTodoListItems((prevItems) =>
-              prevItems.filter((todo) => todo.id !== id)
-            );
-          }}
-          className="text-red-700"
-        />
-      </div>
+        cancelEdit={cancelEdit}
+        completed={completed}
+        currentText={currentText}
+        editingId={editingId}
+        handleEdit={handleEdit}
+        id={id}
+        saveChanges={saveChanges}
+        setCurrentText={setCurrentText}
+        setTodoListItems={setTodoListItems}
+        title={title}
+      />
     );
   });
 
@@ -150,6 +91,13 @@ const TodoList = ({ todoListItems, setTodoListItems }) => {
           <div className="h-4/5 bg-black w-[0.5px] dark:bg-white" />
           <button
             onClick={() => {
+              toast.info("All completed Todos Deleted", {
+                style: {
+                  color: theme == "light" ? "hsl(237, 14%, 26%)" : "white",
+                  backgroundColor:
+                    theme == "light" ? "white" : "hsl(237, 14%, 26%)",
+                },
+              });
               setTodoListItems((prevItems) =>
                 prevItems.filter((todo) => !todo.completed)
               );
