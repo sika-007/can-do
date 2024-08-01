@@ -15,6 +15,7 @@ const TodoInput = ({ newTodo, createTodo, setNewTodo }) => {
         type="text"
         minLength={5}
         maxLength={70}
+        required
         value={newTodo}
         onChange={(e) => {
           setNewTodo(e.target.value);
