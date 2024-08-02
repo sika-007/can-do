@@ -62,6 +62,13 @@ const TodoBox = () => {
       completed: false,
     };
 
+    toast.success("New todo created", {
+      style: {
+        color: theme == "light" ? "hsl(237, 14%, 26%)" : "white",
+        backgroundColor: theme == "light" ? "white" : "hsl(237, 14%, 26%)",
+      },
+    });
+
     setTodoListItems((prev) => {
       return [...prev, todo];
     });
